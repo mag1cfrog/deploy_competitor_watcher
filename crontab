@@ -1,0 +1,2 @@
+# This uses the standard cron syntax to run a command every 5 minutes.
+*/5 * * * * python -m competitor_watcher >> /var/log/cron.log 2>&1
