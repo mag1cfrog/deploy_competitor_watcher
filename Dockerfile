@@ -18,15 +18,18 @@ COPY ./crontab /etc/cron.d/my-cron-job
 
 # Install the package using pip
 RUN pip install ./competitor_watcher-0.1.0-py3-none-any.whl
-
-# Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/my-cron-job
-
-# Apply cron job
-RUN crontab /etc/cron.d/my-cron-job
-
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
 # Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
+COPY setup_cron.sh /usr/local/bin/setup_cron.sh
+
+# Give execution rights on the cron job
+RUN chmod +x /usr/local/bin/setup_cron.sh
+
+# Apply cron job
+CMD /usr/local/bin/setup_cron.sh && cron && tail -f /var/log/cron.log
+
+
+
+
